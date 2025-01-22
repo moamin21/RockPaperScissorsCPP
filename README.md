@@ -20,8 +20,8 @@ A simple console-based **Rock-Paper-Scissors** game implemented in C++ with colo
 ## Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/moamin21/rock-paper-scissors.git
-   cd rock-paper-scissors
+   git clone https://github.com/moamin21/RockPaperScissorsCPP.git
+   cd RockPaperScissorsCPP
    ```
 2. Compile the program using a C++ compiler:
    ```bash
