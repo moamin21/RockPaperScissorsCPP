@@ -1,125 +1,110 @@
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <windows.h> // For setting console colors
+#include <windows.h>
 
 using namespace std;
 
-// Enum for choices
-enum Choice { Rock = 1, Paper, Scissors };
+enum choice { rock = 1, paper, scissors };
 
-// Function to set console text and background colors
-void setConsoleColor(int text, int background) {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (background << 4) | text);
+void set_console_color(int text, int bg) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (bg << 4) | text);
 }
 
-// Function to get computer's choice
-Choice getComputerChoice() {
-    int choice = rand() % 3 + 1; // Random number between 1 and 3
-    return static_cast<Choice>(choice);
+choice get_computer_choice() {
+    int choice_int = rand() % 3 + 1;
+    return static_cast<choice>(choice_int);
 }
 
-// Function to determine the winner of a round
-string determineWinner(Choice playerChoice, Choice computerChoice) {
-    if (playerChoice == computerChoice) return "Draw";
-    if ((playerChoice == Rock && computerChoice == Scissors) ||
-        (playerChoice == Paper && computerChoice == Rock) ||
-        (playerChoice == Scissors && computerChoice == Paper)) {
+string determine_winner(choice player_choice, choice computer_choice) {
+    if (player_choice == computer_choice) return "Draw";
+    if ((player_choice == rock && computer_choice == scissors) ||
+        (player_choice == paper && computer_choice == rock) ||
+        (player_choice == scissors && computer_choice == paper)) {
         return "Player";
     }
     return "Computer";
 }
 
-// Function to play a single round
-void playRound(int roundNumber, int& playerScore, int& computerScore) {
-    cout << "\nRound " << roundNumber << " - Player vs Computer" << endl;
+void play_round(int round_number, int& player_score, int& computer_score) {
+    cout << "\nRound " << round_number << " - Player vs Computer" << endl;
 
-    // Get player choice
-    int playerInput;
-    cout << "Enter your choice (1 for Rock, 2 for Paper, 3 for Scissors): ";
-    cin >> playerInput;
-
-    // Validate player choice
-    while (playerInput < 1 || playerInput > 3) {
-        cout << "Invalid choice. Please enter 1 for Rock, 2 for Paper, or 3 for Scissors: ";
-        cin >> playerInput;
+    int player_input;
+    cout << "Enter your choice (1 for rock, 2 for paper, 3 for scissors): ";
+    cin >> player_input;
+ 
+    while (player_input < 1 || player_input > 3) {
+        cout << "Invalid choice. Please enter 1 for rock, 2 for paper, or 3 for scissors: ";
+        cin >> player_input;
     }
 
-    Choice playerChoice = static_cast<Choice>(playerInput);
+    choice player_choice = static_cast<choice>(player_input);
 
-    // Get computer choice
-    Choice computerChoice = getComputerChoice();
-    cout << "Computer chose: " << (computerChoice == Rock ? "Rock" : computerChoice == Paper ? "Paper" : "Scissors") << endl;
+    choice computer_choice = get_computer_choice();
+    cout << "Computer chose: " << (computer_choice == rock ? "rock" : computer_choice == paper ? "paper" : "scissors") << endl;
 
-    // Determine the winner
-    string winner = determineWinner(playerChoice, computerChoice);
+    string winner = determine_winner(player_choice, computer_choice);
     if (winner == "Player") {
-        ++playerScore;
-        setConsoleColor(10, 0); // Green text
+        ++player_score;
+        set_console_color(10, 0);
         cout << "You win this round!" << endl;
-        Beep(1000, 500); // Ring a bell sound
+        Beep(1000, 500);
     } else if (winner == "Computer") {
-        ++computerScore;
-        setConsoleColor(12, 0); // Red text
+        ++computer_score;
+        set_console_color(12, 0);
         cout << "Computer wins this round!" << endl;
-        Beep(750, 300); // Ring a bell sound
+        Beep(750, 300);
     } else {
-        setConsoleColor(14, 0); // Yellow text
+        set_console_color(14, 0);
         cout << "This round is a draw!" << endl;
-        Beep(500, 200); // Ring a bell sound
+        Beep(500, 200);
     }
 
-    setConsoleColor(15, 0); // Reset to default color
+    set_console_color(15, 0);
 }
 
-// Function to display final scores and determine the overall winner
-void displayFinalScores(int playerScore, int computerScore) {
+void display_final_scores(int player_score, int computer_score) {
     cout << "\nGame Over!" << endl;
     cout << "Final Scores:" << endl;
-    cout << "Player: " << playerScore << endl;
-    cout << "Computer: " << computerScore << endl;
+    cout << "Player: " << player_score << endl;
+    cout << "Computer: " << computer_score << endl;
 
-    if (playerScore > computerScore) {
+    if (player_score > computer_score) {
         cout << "Congratulations! You won the game!" << endl;
-    } else if (computerScore > playerScore) {
+    } else if (computer_score > player_score) {
         cout << "Computer won the game. Better luck next time!" << endl;
     } else {
         cout << "It's a draw!" << endl;
     }
 }
 
-// Function to start and manage the game loop
-void StartGame() {
-    srand(time(0)); // Seed for random number generation
+void start_game() {
+    srand(time(0));
 
-    char playAgain;
+    char play_again;
 
     do {
-        // Ask for the number of rounds
         int rounds;
         cout << "Enter the number of rounds: ";
         cin >> rounds;
 
-        int playerScore = 0, computerScore = 0;
+        int player_score = 0, computer_score = 0;
 
-        // Play the specified number of rounds
         for (int i = 1; i <= rounds; ++i) {
-            playRound(i, playerScore, computerScore);
+            play_round(i, player_score, computer_score);
         }
 
-        // Display final scores and winner
-        displayFinalScores(playerScore, computerScore);
+        display_final_scores(player_score, computer_score);
 
-        // Ask if the user wants to play again
         cout << "\nDo you want to play again? (y/n): ";
-        cin >> playAgain;
+        cin >> play_again;
 
-    } while (playAgain == 'y' || playAgain == 'Y');
+    } while (play_again == 'y' || play_again == 'Y');
 
     cout << "Thank you for playing!" << endl;
 }
 
 int main() {
-    StartGame();
+    start_game();
     return 0;
 }
