@@ -7,10 +7,6 @@ using namespace std;
 
 enum choice { rock = 1, paper, scissors };
 
-void set_console_color(int text, int bg) {
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (bg << 4) | text);
-}
-
 choice get_computer_choice() {
     int choice_int = rand() % 3 + 1;
     return static_cast<choice>(choice_int);
@@ -46,22 +42,16 @@ void play_round(int round_number, int& player_score, int& computer_score) {
     string winner = determine_winner(player_choice, computer_choice);
     if (winner == "Player") {
         ++player_score;
-        set_console_color(10, 0);
         cout << "You win this round!" << endl;
-        Beep(1000, 500);
     } else if (winner == "Computer") {
         ++computer_score;
-        set_console_color(12, 0);
         cout << "Computer wins this round!" << endl;
-        Beep(750, 300);
     } else {
-        set_console_color(14, 0);
         cout << "This round is a draw!" << endl;
-        Beep(500, 200);
     }
 
-    set_console_color(15, 0);
 }
+
 
 void display_final_scores(int player_score, int computer_score) {
     cout << "\nGame Over!" << endl;
@@ -78,7 +68,8 @@ void display_final_scores(int player_score, int computer_score) {
     }
 }
 
-void start_game() {
+int main() {
+
     srand(time(0));
 
     char play_again;
@@ -102,9 +93,5 @@ void start_game() {
     } while (play_again == 'y' || play_again == 'Y');
 
     cout << "Thank you for playing!" << endl;
-}
-
-int main() {
-    start_game();
-    return 0;
+    
 }
